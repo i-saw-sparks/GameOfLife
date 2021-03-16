@@ -1,4 +1,10 @@
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+
 public class GameOfLife {
     private int boardsOvTime[][][]; 
     private int currentTick;
@@ -7,6 +13,12 @@ public class GameOfLife {
         currentTick = 0;
         boardsOvTime = new int[ticks][][];
         boardsOvTime[0] = cloneOneBoard(board);
+    }
+    
+    public GameOfLife(String fileName, int ticks) throws IOException{
+        currentTick = 0;
+        boardsOvTime = new int[ticks][][];
+        boardsOvTime[0] = readBoard(fileName);
     }
     
     public int getCurrentTick(){
@@ -103,6 +115,25 @@ public class GameOfLife {
         for(int i = 0; i < board.length; i++){
             System.arraycopy(board[i], 0, ret[i], 0, board[i].length);
         }
+        return ret;
+    }
+    
+    public int[][] readBoard(String fileName) throws IOException{
+        File fileToRead = new File(fileName);
+        BufferedReader bufferedFile = new BufferedReader(new FileReader(fileToRead));
+        
+        String fileLine=bufferedFile.readLine();
+        String parts[] = fileLine.split(" ",0);
+        int xLen = Integer.parseInt(parts[0]);
+        int yLen = Integer.parseInt(parts[1]);
+        int ret[][] = new int[xLen][yLen];
+        
+        for(int i = 0; i < xLen; i++){
+            for(int j = 0; j < yLen; j++){
+                ret[i][j] = Integer.parseInt(bufferedFile.readLine());
+            }
+        }
+        
         return ret;
     }
     
